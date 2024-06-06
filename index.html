@@ -68,6 +68,12 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     $.getJSON("FastCharing50kw.json", function(FC) {
       L.geoJson(FC).addTo(map);
     });
+    $.getJSON("FastCharing24kw.json", function(FC) {
+      L.geoJson(FC).addTo(map);
+    });
+    $.getJSON("ReqularCharging22kw.json", function(FC) {
+      L.geoJson(FC).addTo(map);
+    });
 
   </script>
 </body>
