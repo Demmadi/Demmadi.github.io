@@ -1,0 +1,4 @@
+{
+  "type" : "FeatureCollection",
+  "features" : [{"type":"Feature","id":0,"geometry":{"type":"Point","coordinates":[35.198880690000067,31.902899570000045]},"properties":{"FID":0,"num":17,"Y":31.902899569999999,"X":35.198880690000003,"Gov":"رام الله","GovE":"Ramallah","Station_ca":"DC 50 KW"}}]
+}

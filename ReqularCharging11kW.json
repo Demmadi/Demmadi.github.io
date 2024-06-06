@@ -1,0 +1,4 @@
+{
+  "type" : "FeatureCollection",
+  "features" : [{"type":"Feature","id":0,"geometry":{"type":"Point","coordinates":[35.206817210000054,31.908646270000077]},"properties":{"FID":0,"num":19,"Y":31.908646269999998,"X":35.206817209999997,"Gov":"رام الله","GovE":"Ramallah","Station_ca":"AC 11 KW"}},{"type":"Feature","id":1,"geometry":{"type":"Point","coordinates":[35.206694500000026,31.908710020000058]},"properties":{"FID":1,"num":20,"Y":31.908710020000001,"X":35.206694499999998,"Gov":"رام الله","GovE":"Ramallah","Station_ca":"AC 11 KW"}}]
+}
