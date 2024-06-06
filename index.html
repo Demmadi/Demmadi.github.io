@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Map of Electric Car Charging Stations in Ramallah</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <style>
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+    }
+
+    #map {
+      position: absolute;
+      width: 100%;
+      top: 0px;
+      bottom: 0;
+    }
+
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #left-button {
+      left: 10px;
+    }
+
+    #right-button {
+      right: 10px;
+    }
+
+    .legend {
+      background: white;
+      padding: 5px;
+      line-height: 1.5em;
+      color: #333;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      font-size: 12px;
+      max-width: 150px;
+    }
+
+    .legend i {
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      margin-right: 5px;
+      opacity: 0.7;
+      background-size: cover;
+    }
+
+    .legend div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- the map -->
+  <div id="map"></div>
+
+  <!-- navigation buttons -->
+  <div id="left-button" class="nav-button"><i class="fas fa-arrow-left"></i></div>
+  <div id="right-button" class="nav-button"><i class="fas fa-arrow-right"></i></div>
+
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    const mapOptions = {
+      zoomSnap: 0.5,
+      center: [31.9045, 35.2045],
+      zoom:14,
+    };
+
+    const map = L.map("map", mapOptions);
+
+    const baseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 20
+    }).addTo(map);
+
+    L.control.scale({
+      position: 'bottomright',
+      metric: true,
+      imperial: false
+    }).addTo(map);
+
+    const fastCharging24Icon = L.icon({
+      iconUrl: 'Green.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+    });
+
+    const fastCharging50Icon = L.icon({
+      iconUrl: 'blue.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+    });
+
+    const regularCharging11Icon = L.icon({
+      iconUrl: 'Red.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+    });
+
+    const regularCharging22Icon = L.icon({
+      iconUrl: 'Gry.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+    });
+
+    const fastCharging24Layer = L.layerGroup();
+    const fastCharging50Layer = L.layerGroup();
+    const regularCharging11Layer = L.layerGroup();
+    const regularCharging22Layer = L.layerGroup();
+
+    $.getJSON("https://raw.githubusercontent.com/DemaMadi/DemaMadi.github.io/main/RamallahZones.json", function(RZ) {
+      const goverLayer = L.geoJson(RZ, {
+        style: function(feature) {
+          return {
+            fillColor: "",
+            fillOpacity: 0.0,
+            color: "black",
+            weight: 1.5,
+            opacity: 0.7
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          layer.on('click', function(e) {
+            alert("Name: " + feature.properties.NAME);
+          });
+        }
+      }).addTo(map);
+
+      map.fitBounds(goverLayer.getBounds());
+    });
+
+    $.getJSON("https://raw.githubusercontent.com/DemaMadi/demamaddii.github.io/main/FastCharging24kw.json", function(data) {
+  L.geoJson(data, {
+    pointToLayer: function(feature, latlng) {
+      return L.marker(latlng, { icon: fastCharging24Icon });
+    }
+  }).addTo(fastCharging24Layer);
+});
+
+   $.getJSON("https://raw.githubusercontent.com/DemaMadi/demamaddii.github.io/main/FastChargingr50kw.json", function(data) {
+  L.geoJson(data, {
+    pointToLayer: function(feature, latlng) {
+      return L.marker(latlng, { icon: fastCharging50Icon });
+    }
+  }).addTo(fastCharging50Layer);
+});
+
+   $.getJSON("https://raw.githubusercontent.com/DemaMadi/demamaddii.github.io/main/ReqularChargingr11kw.json", function(data) {
+  L.geoJson(data, {
+    pointToLayer: function(feature, latlng) {
+      return L.marker(latlng, { icon: regularCharging11Icon });
+    }
+  }).addTo(regularCharging11Layer);
+});
+
+  $.getJSON("https://raw.githubusercontent.com/DemaMadi/demamaddii.github.io/main/ReqularChargingr22kw.json", function(data) {
+  L.geoJson(data, {
+    pointToLayer: function(feature, latlng) {
+      return L.marker(latlng, { icon: regularCharging22Icon });
+    }
+  }).addTo(regularCharging22Layer);
+});
+
+
+    fastCharging24Layer.addTo(map);
+    fastCharging50Layer.addTo(map);
+    regularCharging11Layer.addTo(map);
+    regularCharging22Layer.addTo(map);
+
+    const overlayMaps = {
+      "Fast Charging 24kW": fastCharging24Layer,
+      "Fast Charging 50kW": fastCharging50Layer,
+      "Regular Charging 11kW": regularCharging11Layer,
+      "Regular Charging 22kW": regularCharging22Layer
+    };
+
+    L.control.layers(null, overlayMaps, { position: 'topleft' }).addTo(map);
+
+    L.control.locate({
+      position: 'topleft',
+      drawCircle: false,
+      follow: true,
+      setView: true,
+      keepCurrentZoomLevel: false,
+      markerStyle: {
+        weight: 1,
+        opacity: 0.8,
+        fillOpacity: 0.8
+      },
+      icon: 'fa fa-location-arrow',
+      metric: true,
+      strings: {
+        title: "Show location ",
+        popup: "You are within {distance} {unit} from this point",
+        outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
+      },
+      locateOptions: {
+        maxZoom: 15,
+        initialZoomLevel: 15,
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 10000
+      }
+    }).addTo(map);
+
+    const legend = L.control({ position: 'topright' });
+
+    legend.onAdd = function(map) {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML += '<div><i style="background-image: url(Green.png);"></i> Fast Charging 24kW</div>';
+      div.innerHTML += '<div><i style="background-image: url(blue.png);"></i> Fast Charging 50kW</div>';
+      div.innerHTML += '<div><i style="background-image: url(Red.png);"></i> Regular Charging 11kW</div>';
+      div.innerHTML += '<div><i style="background-image: url(Gry.png);"></i> Regular Charging 22kW</div>';
+      return div;
+    };
+
+    legend.addTo(map);
+
+    // Function to pan the map to the left
+    function panLeft() {
+      const currentCenter = map.getCenter();
+      const newCenter = L.latLng(currentCenter.lat, currentCenter.lng - 0.05); // Adjust the lng value as needed
+      map.panTo(newCenter);
+    }
+
+    // Function to pan the map to the right
+    function panRight() {
+      const currentCenter = map.getCenter();
+      const newCenter = L.latLng(currentCenter.lat, currentCenter.lng + 0.05); // Adjust the lng value as needed
+      map.panTo(newCenter);
+    }
+
+    // Attach event listeners to the buttons
+    document.getElementById('left-button').addEventListener('click', panLeft);
+    document.getElementById('right-button').addEventListener('click', panRight);
+  </script>
+</body>
+
+</html>
