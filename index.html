@@ -42,21 +42,23 @@
       maxZoom: 20
     }).addTo(map);
 
-    // تحميل بيانات GeoJSON باستخدام jQuery
+    // تحميل بيانات GeoJSON لحدود مدينة سلفيت
     $.getJSON("SalfitC.json", function(SC) {
       L.geoJson(SC, {
         style: {
-          color: "blue",
-          weight: 2
+          color: "black", // اللون الأسود للحدود
+          weight: 2, // سماكة الخط
+          fillOpacity: 0 // شفافية تعبئة الحدود (بدون تعبئة)
         }
       }).addTo(map);
     });
 
+    // تحميل بيانات GeoJSON للطرق
     $.getJSON("RoadS.json", function(RS) {
       L.geoJson(RS, {
         style: {
-          color: "red",
-          weight: 1
+          color: "black", // اللون الأسود للطرق
+          weight: 0.5 // سماكة الخط (رفيع جدًا)
         }
       }).addTo(map);
     });
