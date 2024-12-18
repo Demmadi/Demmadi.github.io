@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
 
   <!-- Give the page a title -->
-  <title>Ramallah Waste Containers</title>
+  <title> الاستعلام عن أسعار و مواقع مواصلات مدينة سلفيت  </title>
 
   <!-- Add a link to the Leaflet CSS library so you can reference it for styling your map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
@@ -61,12 +61,12 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 // use jquery to load GeoJSON data
 
 
-    $.getJSON("RamallahZones.json", function(RZ) {
-      L.geoJson(RZ).addTo(map);
+    $.getJSON("SalfitC.json", function(SC) {
+      L.geoJson(SC).addTo(map);
     });
 
-    $.getJSON("FastCharing50kw.json", function(FC) {
-      L.geoJson(FC).addTo(map);
+    $.getJSON("RoadS.json", function(RS) {
+      L.geoJson(RS).addTo(map);
     });
     $.getJSON("FastCharing24kw.json", function(FC) {
       L.geoJson(FC).addTo(map);
