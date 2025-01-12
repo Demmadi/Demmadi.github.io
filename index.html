@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title> شبكة الماء في مدينة سلفيت و قرية اسكاكا و فرخة </title>
+  <title>شبكة الماء في مدينة سلفيت وقرية اسكاكا وفرخة</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
   <style>
     body {
@@ -27,56 +27,60 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   <script>
-    // تعريف خيارات الخريطة
+    // إعدادات الخريطة
     const mapOptions = {
-      zoomsnap: 0.2, // يجب فصل الخاصيات بفاصلة
-      center: [32.082203, 35.182099], // إحداثيات الموقع المحدد
-      zoom: 14 // مستوى تكبير أعلى لعرض المنطقة بشكل أقرب
+      center: [32.082203, 35.182099], // مركز الخريطة (إحداثيات سلفيت)
+      zoom: 14, // مستوى التكبير
+      zoomSnap: 0.2 // التحكم في حساسية التكبير
     };
 
     // إنشاء الخريطة
     const map = L.map("map", mapOptions);
 
-    // إضافة طبقة أساسية إلى الخريطة
+    // إضافة طبقة أساسية (OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 20
     }).addTo(map);
 
     // تحميل بيانات GeoJSON لحدود مدينة سلفيت
-    $.getJSON("SalfitC.json", function(SC) {
-      L.geoJson(SC, {
+    $.getJSON("SalfitC.json", function (data) {
+      L.geoJson(data, {
         style: {
           color: "black", // اللون الأسود للحدود
           weight: 2, // سماكة الخط
-          fillOpacity: 0 // شفافية تعبئة الحدود (بدون تعبئة)
+          fillOpacity: 0 // بدون تعبئة
         }
       }).addTo(map);
     });
-    $.getJSON("StA.json", function(SA) {
-      L.geoJson(SA, {
+
+    // تحميل بيانات GeoJSON لحدود قرية اسكاكا
+    $.getJSON("StA.json", function (data) {
+      L.geoJson(data, {
         style: {
-          color: "red", // اللون الأسود للحدود
+          color: "red", // اللون الأحمر للحدود
           weight: 2, // سماكة الخط
-          fillOpacity: 0 // شفافية تعبئة الحدود (بدون تعبئة)
+          fillOpacity: 0 // بدون تعبئة
         }
       }).addTo(map);
-    });  
-      $.getJSON("IsF.json", function(IF) {
-      L.geoJson(IF, {
+    });
+
+    // تحميل بيانات GeoJSON لحدود قرية فرخة
+    $.getJSON("IsF.json", function (data) {
+      L.geoJson(data, {
         style: {
-          color: "blue", // اللون الأسود للحدود
+          color: "blue", // اللون الأزرق للحدود
           weight: 2, // سماكة الخط
-          fillOpacity: 0 // شفافية تعبئة الحدود (بدون تعبئة)
+          fillOpacity: 0 // بدون تعبئة
         }
       }).addTo(map);
     });
 
     // تحميل بيانات GeoJSON للطرق
-    $.getJSON("RoadS.json", function(RS) {
-      L.geoJson(RS, {
+    $.getJSON("RoadS.json", function (data) {
+      L.geoJson(data, {
         style: {
-          color: "gray", // اللون الأسود للطرق
+          color: "gray", // اللون الرمادي للطرق
           weight: 0.5 // سماكة الخط (رفيع جدًا)
         }
       }).addTo(map);
