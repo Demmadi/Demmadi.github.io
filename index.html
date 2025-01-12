@@ -31,7 +31,7 @@
     const mapOptions = {
       zoomsnap: 0.2, // يجب فصل الخاصيات بفاصلة
       center: [32.082203, 35.182099], // إحداثيات الموقع المحدد
-      zoom: 12 // مستوى تكبير أعلى لعرض المنطقة بشكل أقرب
+      zoom: 14 // مستوى تكبير أعلى لعرض المنطقة بشكل أقرب
     };
 
     // إنشاء الخريطة
@@ -48,6 +48,24 @@
       L.geoJson(SC, {
         style: {
           color: "black", // اللون الأسود للحدود
+          weight: 2, // سماكة الخط
+          fillOpacity: 0 // شفافية تعبئة الحدود (بدون تعبئة)
+        }
+      }).addTo(map);
+    });
+    $.getJSON("StA.json", function(SA) {
+      L.geoJson(SA, {
+        style: {
+          color: "red", // اللون الأسود للحدود
+          weight: 2, // سماكة الخط
+          fillOpacity: 0 // شفافية تعبئة الحدود (بدون تعبئة)
+        }
+      }).addTo(map);
+    });  
+      $.getJSON("IsF.json", function(IF) {
+      L.geoJson(IF, {
+        style: {
+          color: "blue", // اللون الأسود للحدود
           weight: 2, // سماكة الخط
           fillOpacity: 0 // شفافية تعبئة الحدود (بدون تعبئة)
         }
