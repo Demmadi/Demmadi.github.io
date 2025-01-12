@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>الاستعلام عن أسعار ومواقع مواصلات مدينة سلفيت</title>
+  <title> شبكة الماء في مدينة سلفيت و قرية اسكاكا و فرخة </title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
   <style>
     body {
@@ -31,7 +31,7 @@
     const mapOptions = {
       zoomsnap: 0.2, // يجب فصل الخاصيات بفاصلة
       center: [32.082203, 35.182099], // إحداثيات الموقع المحدد
-      zoom: 18 // مستوى تكبير أعلى لعرض المنطقة بشكل أقرب
+      zoom: 20 // مستوى تكبير أعلى لعرض المنطقة بشكل أقرب
     };
 
     // إنشاء الخريطة
@@ -58,7 +58,7 @@
     $.getJSON("RoadS.json", function(RS) {
       L.geoJson(RS, {
         style: {
-          color: "black", // اللون الأسود للطرق
+          color: "gray", // اللون الأسود للطرق
           weight: 0.5 // سماكة الخط (رفيع جدًا)
         }
       }).addTo(map);
