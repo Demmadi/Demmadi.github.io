@@ -43,47 +43,40 @@
       maxZoom: 20
     }).addTo(map);
 
-    // تحميل بيانات GeoJSON لحدود مدينة سلفيت
-    $.getJSON("SalfitC.json", function (SC) {
-      L.geoJson(SC, {
-        style: {
-          color: "black", // اللون الأسود للحدود
-          weight: 2, // سماكة الخط
-          fillOpacity: 0 // بدون تعبئة
-        }
-      }).addTo(map);
+    // دالة لإضافة بيانات GeoJSON إلى الخريطة مع نمط مخصص
+    function addGeoJsonData(url, styleOptions) {
+      $.getJSON(url, function (data) {
+        L.geoJson(data, {
+          style: styleOptions
+        }).addTo(map);
+      });
+    }
+
+    // إضافة حدود مدينة سلفيت
+    addGeoJsonData("SalfitC.json", {
+      color: "black", // اللون الأسود للحدود
+      weight: 2, // سماكة الخط
+      fillOpacity: 0 // بدون تعبئة
     });
 
-    // تحميل بيانات GeoJSON لحدود قرية اسكاكا
-    $.getJSON("StA.json", function (SA) {
-      L.geoJson(SA, {
-        style: {
-          color: "red", // اللون الأحمر للحدود
-          weight: 2, // سماكة الخط
-          fillOpacity: 0 // بدون تعبئة
-        }
-      }).addTo(map);
+    // إضافة حدود قرية اسكاكا
+    addGeoJsonData("StA.json", {
+      color: "red", // اللون الأحمر للحدود
+      weight: 2, // سماكة الخط
+      fillOpacity: 0 // بدون تعبئة
     });
 
-    // تحميل بيانات GeoJSON لحدود قرية فرخة
-    $.getJSON("IsF.json", function (IF) {
-      L.geoJson(IF, {
-        style: {
-          color: "blue", // اللون الأزرق للحدود
-          weight: 2, // سماكة الخط
-          fillOpacity: 0 // بدون تعبئة
-        }
-      }).addTo(map);
+    // إضافة حدود قرية فرخة
+    addGeoJsonData("IsF.json", {
+      color: "blue", // اللون الأزرق للحدود
+      weight: 2, // سماكة الخط
+      fillOpacity: 0 // بدون تعبئة
     });
 
-    // تحميل بيانات GeoJSON للطرق
-    $.getJSON("RoadS.json", function (data) {
-      L.geoJson(data, {
-        style: {
-          color: "gray", // اللون الرمادي للطرق
-          weight: 0.5 // سماكة الخط (رفيع جدًا)
-        }
-      }).addTo(map);
+    // إضافة بيانات الطرق
+    addGeoJsonData("RoadS.json", {
+      color: "gray", // اللون الرمادي للطرق
+      weight: 0.5 // سماكة الخط (رفيع جدًا)
     });
   </script>
 </body>
