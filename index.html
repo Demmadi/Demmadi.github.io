@@ -48,24 +48,19 @@
         L.geoJson(data, {
           style: styleOptions,
           onEachFeature: function (feature, layer) {
-            // تحديد ظهور النافذة المنبثقة فقط عند النقر على الحدود
-            if (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon") {
-              layer.on('click', function() {
-                let popupContent = ""; // تم إزالة Location
+            let popupContent = ""; // تم إزالة Location
 
-                popupFields.forEach(field => {
-                  if (feature.properties[field]) {
-                    popupContent += `<b>${field}:</b> ${feature.properties[field]}<br>`;
-                  }
-                });
+            popupFields.forEach(field => {
+              if (feature.properties[field]) {
+                popupContent += <b>${field}:</b> ${feature.properties[field]}<br>;
+              }
+            });
 
-                if (imageUrl) {
-                  popupContent += `<img src="${imageUrl}" alt="Image" width="200" style="border-radius: 10px;">`;
-                }
-
-                layer.bindPopup(popupContent).openPopup();
-              });
+            if (imageUrl) {
+              popupContent += <img src="${imageUrl}" alt="Image" width="200" style="border-radius: 10px;">;
             }
+
+            layer.bindPopup(popupContent);
           }
         }).addTo(map);
       });
