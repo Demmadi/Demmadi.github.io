@@ -58,29 +58,32 @@
       }).addTo(map);
     });
 
-    // دالة لإضافة بيانات GeoJSON إلى الخريطة مع نمط مخصص (للقرى الأخرى)
-    function addGeoJsonData(url, styleOptions) {
-      $.getJSON(url, function (data) {
-        L.geoJson(data, {
-          style: styleOptions
-        }).addTo(map);
-      });
-    }
-
     // إضافة حدود قرية اسكاكا
     addGeoJsonData("IskA.json", {
       color: "red", // اللون الأحمر للحدود
       weight: 2, // سماكة الخط
       fillOpacity: 0 // بدون تعبئة
+        },
+        onEachFeature: function (feature, layer) {
+          if (feature.properties && feature.properties.Community_) {
+            layer.bindPopup("Location: " + feature.properties.Community_);
+          }
+        }
+      }).addTo(map);
     });
-
     // إضافة حدود قرية فرخة
     addGeoJsonData("kiS.json", {
       color: "brown", // اللون البني للحدود
       weight: 2, // سماكة الخط
       fillOpacity: 0 // بدون تعبئة
+        },
+        onEachFeature: function (feature, layer) {
+          if (feature.properties && feature.properties.Community_) {
+            layer.bindPopup("Location: " + feature.properties.Community_);
+          }
+        }
+      }).addTo(map);
     });
-
   </script>
 </body>
 </html>
