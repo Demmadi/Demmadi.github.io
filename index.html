@@ -90,4 +90,39 @@
       color: "brown",
       weight: 2,
       fillOpacity: 0
-    }, ["Community_"], "
+    }, ["Community_"], "https://palqura.com/images/village/photo_2024-01-15_07-49-41.jpg");
+
+    // إضافة طبقة خطوط التوصيلات المنزلية
+    addGeoJsonData("HouseConnection.json", {
+      color: "Navy",
+      weight: 2,
+      dashArray: "5, 5"
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+
+    // إضافة طبقة خطوط المياه 1
+    addGeoJsonData("DistributionPipe1.json", {
+      color: "red",
+      weight: 1,
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+
+    // إضافة طبقة خطوط المياه 2
+    addGeoJsonData("DistributionPipe2.json", {
+      color: "blue",
+      weight: 2,
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+
+    // إضافة طبقة خطوط المياه 6
+    addGeoJsonData("DistributionPipe6.json", {
+      color: "black",
+      weight: 2,
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+
+    // إضافة طبقة خطوط المياه 
+    addGeoJsonData("DistributionPipe3.json", {
+      color: "green",
+      weight: 3
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+
+  </script>
+</body>
+</html>
