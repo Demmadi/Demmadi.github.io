@@ -93,7 +93,29 @@
       dashArray: "5, 5"
     }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
-    // إضافة طبقة خطوط التوزيع الرئيسية
+    // إضافة طبقة خطوط المياه 1
+    addGeoJsonData("DistributionPipe1.json", {
+      color: "red",
+      weight: 1,
+      dashArray: "5, 5"
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+
+    // إضافة طبقة خطوط المياه 2
+    addGeoJsonData("DistributionPipe2.json", {
+      color: "yellow",
+      weight: 1,
+      dashArray: "5, 5"
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+
+    // إضافة طبقة خطوط المياه 6
+    addGeoJsonData("DistributionPipe2.json", {
+      color: "black",
+      weight: 2,
+      dashArray: "5, 5"
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+
+    
+    // إضافة طبقة خطوط المياه 
     addGeoJsonData("DistributionPipe3.json", {
       color: "green",
       weight: 3
