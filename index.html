@@ -51,12 +51,12 @@
             let popupContent = "<b>Location:</b> " + (feature.properties.Community_ || feature.properties.location || "Unknown") + "<br>";
             popupFields.forEach(field => {
               if (feature.properties[field]) {
-                popupContent += <b>${field}:</b> ${feature.properties[field]}<br>;
+                popupContent += `<b>${field}:</b> ${feature.properties[field]}<br>`;
               }
             });
 
             if (imageUrl) {
-              popupContent += <img src="${imageUrl}" alt="Image" width="200" style="border-radius: 10px;">;
+              popupContent += `<img src="${imageUrl}" alt="Image" width="200" style="border-radius: 10px;">`;
             }
 
             layer.bindPopup(popupContent);
@@ -112,7 +112,6 @@
       weight: 2,
     }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
-    
     // إضافة طبقة خطوط المياه 
     addGeoJsonData("DistributionPipe3.json", {
       color: "green",
