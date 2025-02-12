@@ -48,7 +48,8 @@
         L.geoJson(data, {
           style: styleOptions,
           onEachFeature: function (feature, layer) {
-            let popupContent = "<b>Location:</b> " + (feature.properties.Community_ || feature.properties.location || "Unknown") + "<br>";
+            let popupContent = ""; // تم إزالة Location
+
             popupFields.forEach(field => {
               if (feature.properties[field]) {
                 popupContent += `<b>${field}:</b> ${feature.properties[field]}<br>`;
@@ -88,7 +89,7 @@
 
     // إضافة طبقة خطوط التوصيلات المنزلية
     addGeoJsonData("HouseConnection.json", {
-      color: "blue",
+      color: "Navy",
       weight: 2,
       dashArray: "5, 5"
     }, ["NetworkType", "Material", "Diameter", "layout year"]);
@@ -97,13 +98,12 @@
     addGeoJsonData("DistributionPipe1.json", {
       color: "red",
       weight: 1,
-      dashArray: "5, 5"
     }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
     // إضافة طبقة خطوط المياه 2
     addGeoJsonData("DistributionPipe2.json", {
       color: "blue",
-      weight: 1,
+      weight: 2,
     }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
     // إضافة طبقة خطوط المياه 6
