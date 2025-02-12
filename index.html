@@ -42,19 +42,24 @@
       maxZoom: 20
     }).addTo(map);
 
-    // دالة لإضافة بيانات GeoJSON إلى الخريطة مع صورة مخصصة لكل منطقة
-    function addGeoJsonData(url, styleOptions, imageUrl) {
+    // دالة لإضافة بيانات GeoJSON مع صورة أو معلومات
+    function addGeoJsonData(url, styleOptions, popupFields, imageUrl = null) {
       $.getJSON(url, function (data) {
         L.geoJson(data, {
           style: styleOptions,
           onEachFeature: function (feature, layer) {
-            if (feature.properties && feature.properties.Community_) {
-              let popupContent = `
-                <b>Location:</b> ${feature.properties.Community_} <br>
-                <img src="${imageUrl}" alt="${feature.properties.Community_}" width="200" style="border-radius: 10px;">
-              `;
-              layer.bindPopup(popupContent);
+            let popupContent = "<b>Location:</b> " + (feature.properties.Community_ || feature.properties.location || "Unknown") + "<br>";
+            popupFields.forEach(field => {
+              if (feature.properties[field]) {
+                popupContent += `<b>${field}:</b> ${feature.properties[field]}<br>`;
+              }
+            });
+
+            if (imageUrl) {
+              popupContent += `<img src="${imageUrl}" alt="Image" width="200" style="border-radius: 10px;">`;
             }
+
+            layer.bindPopup(popupContent);
           }
         }).addTo(map);
       });
@@ -65,21 +70,34 @@
       color: "black",
       weight: 2,
       fillOpacity: 0
-    }, "https://upload.wikimedia.org/wikipedia/commons/9/97/Salfit_6-2018.jpg");
+    }, ["Community_"], "https://upload.wikimedia.org/wikipedia/commons/9/97/Salfit_6-2018.jpg");
 
     // إضافة حدود قرية اسكاكا مع صورة مخصصة
     addGeoJsonData("IskA.json", {
       color: "red",
       weight: 2,
       fillOpacity: 0
-    }, "https://palqura.com/images/village/Iskaka-48619.jpg");
+    }, ["Community_"], "https://palqura.com/images/village/Iskaka-48619.jpg");
 
     // إضافة حدود قرية فرخة مع صورة مخصصة
     addGeoJsonData("kiS.json", {
       color: "brown",
       weight: 2,
       fillOpacity: 0
-    }, "https://palqura.com/images/village/photo_2024-01-15_07-49-41.jpg");
+    }, ["Community_"], "https://palqura.com/images/village/photo_2024-01-15_07-49-41.jpg");
+
+    // إضافة طبقة خطوط التوصيلات المنزلية
+    addGeoJsonData("HouseConnection.json", {
+      color: "blue",
+      weight: 2,
+      dashArray: "5, 5"
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+
+    // إضافة طبقة خطوط التوزيع الرئيسية
+    addGeoJsonData("DistributionPipe3.json", {
+      color: "green",
+      weight: 3
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
   </script>
 </body>
