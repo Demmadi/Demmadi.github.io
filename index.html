@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <title>Salfit Water Network</title>
@@ -31,7 +30,7 @@
     const mapOptions = {
       center: [32.082203, 35.182099], // مركز الخريطة (إحداثيات سلفيت)
       zoom: 14, // مستوى التكبير
-      zoomSnap: 0.3 // التحكم في حساسية التكبير
+      zoomSnap: 0.2 // التحكم في حساسية التكبير
     };
 
     // إنشاء الخريطة
@@ -53,7 +52,7 @@
     }
 
     // إضافة حدود مدينة سلفيت
-    addGeoJsonData("AreaSt.json", {
+    addGeoJsonData("SlF.json", {
       color: "black", // اللون الأسود للحدود
       weight: 2, // سماكة الخط
       fillOpacity: 0 // بدون تعبئة
@@ -64,14 +63,14 @@ addGeoJsonData("BuA.json", {
     });
 
     // إضافة حدود قرية اسكاكا
-    addGeoJsonData("StA.json", {
+    addGeoJsonData("IskA.json", {
       color: "red", // اللون الأحمر للحدود
       weight: 2, // سماكة الخط
       fillOpacity: 0 // بدون تعبئة
     });
 
     // إضافة حدود قرية فرخة
-    addGeoJsonData("IsF.json", {
+    addGeoJsonData("kiS.json", {
       color: "blue", // اللون الأزرق للحدود
       weight: 2, // سماكة الخط
       fillOpacity: 0 // بدون تعبئة
