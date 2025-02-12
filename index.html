@@ -42,40 +42,44 @@
       maxZoom: 20
     }).addTo(map);
 
-    // دالة لإضافة بيانات GeoJSON إلى الخريطة مع نمط مخصص ونافذة منبثقة
-    function addGeoJsonData(url, styleOptions) {
+    // دالة لإضافة بيانات GeoJSON إلى الخريطة مع نافذة منبثقة تحتوي على صورة
+    function addGeoJsonData(url, styleOptions, imageUrl) {
       $.getJSON(url, function (data) {
         L.geoJson(data, {
           style: styleOptions,
           onEachFeature: function (feature, layer) {
             if (feature.properties && feature.properties.Community_) {
-              layer.bindPopup("Location: " + feature.properties.Community_);
+              let popupContent = `
+                <b>Location:</b> ${feature.properties.Community_} <br>
+                <img src="${imageUrl}" alt="Location Image" width="200" style="border-radius: 10px;">
+              `;
+              layer.bindPopup(popupContent);
             }
           }
         }).addTo(map);
       });
     }
 
-    // إضافة حدود مدينة سلفيت
+    // إضافة حدود مدينة سلفيت مع صورة
     addGeoJsonData("SlF.json", {
-      color: "black", // اللون الأسود للحدود
-      weight: 2, // سماكة الخط
-      fillOpacity: 0 // بدون تعبئة
-    });
+      color: "black",
+      weight: 2,
+      fillOpacity: 0
+    }, "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Salfit_Palestine.jpg/250px-Salfit_Palestine.jpg");
 
-    // إضافة حدود قرية اسكاكا
+    // إضافة حدود قرية اسكاكا بدون صورة
     addGeoJsonData("IskA.json", {
-      color: "red", // اللون الأحمر للحدود
-      weight: 2, // سماكة الخط
-      fillOpacity: 0 // بدون تعبئة
-    });
+      color: "red",
+      weight: 2,
+      fillOpacity: 0
+    }, "");
 
-    // إضافة حدود قرية فرخة
+    // إضافة حدود قرية فرخة بدون صورة
     addGeoJsonData("kiS.json", {
-      color: "brown", // اللون البني للحدود
-      weight: 2, // سماكة الخط
-      fillOpacity: 0 // بدون تعبئة
-    });
+      color: "brown",
+      weight: 2,
+      fillOpacity: 0
+    }, "");
 
   </script>
 </body>
