@@ -52,12 +52,12 @@
 
             popupFields.forEach(field => {
               if (feature.properties[field]) {
-                popupContent += <b>${field}:</b> ${feature.properties[field]}<br>;
+                popupContent += `<b>${field}:</b> ${feature.properties[field]}<br>`;
               }
             });
 
             if (imageUrl) {
-              popupContent += <img src="${imageUrl}" alt="Image" width="200" style="border-radius: 10px;">;
+              popupContent += `<img src="${imageUrl}" alt="Image" width="200" style="border-radius: 10px;">`;
             }
 
             layer.bindPopup(popupContent);
