@@ -88,7 +88,7 @@
 
     // إضافة طبقة خطوط التوصيلات المنزلية
     addGeoJsonData("HouseConnection.json", {
-      color: "baby blue",
+      color: "blue",
       weight: 2,
       dashArray: "5, 5"
     }, ["NetworkType", "Material", "Diameter", "layout year"]);
@@ -97,12 +97,13 @@
     addGeoJsonData("DistributionPipe1.json", {
       color: "red",
       weight: 1,
+      dashArray: "5, 5"
     }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
     // إضافة طبقة خطوط المياه 2
     addGeoJsonData("DistributionPipe2.json", {
       color: "blue",
-      weight: 2,
+      weight: 1,
     }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
     // إضافة طبقة خطوط المياه 6
