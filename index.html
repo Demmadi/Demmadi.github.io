@@ -42,26 +42,28 @@
       maxZoom: 20
     }).addTo(map);
 
-    // دالة لإضافة بيانات GeoJSON مع صورة أو معلومات
-    function addGeoJsonData(url, styleOptions, popupFields, imageUrl = null) {
+    // دالة لإضافة بيانات GeoJSON مع صورة فقط عند الضغط على الحدود
+    function addGeoJsonData(url, styleOptions, imageUrl = null) {
       $.getJSON(url, function (data) {
         L.geoJson(data, {
           style: styleOptions,
           onEachFeature: function (feature, layer) {
-            let popupContent = "<b>Location:</b> " + (feature.properties.Community_ || feature.properties.location || "Unknown") + "<br>";
-            popupFields.forEach(field => {
-              if (feature.properties[field]) {
-                popupContent += `<b>${field}:</b> ${feature.properties[field]}<br>`;
-              }
-            });
-
             if (imageUrl) {
-              popupContent += `<img src="${imageUrl}" alt="Image" width="200" style="border-radius: 10px;">`;
+              // إظهار صورة فقط في النافذة المنبثقة
+              const popupContent = `
+                <b>Location:</b> ${feature.properties.Community_ || "Unknown"}<br>
+                <img src="${imageUrl}" alt="Image" width="300" style="border-radius: 10px;">
+                <br><br>
+                <b>Coordinates:</b> ${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}<br>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Map_marker_icon_%28blue%29.svg/1024px-Map_marker_icon_%28blue%29.svg.png" alt="Location Icon" width="20" style="vertical-align: middle;">
+                <b>Marker Location</b>
+              `;
+              layer.bindPopup(popupContent);
             }
-
-            layer.bindPopup(popupContent);
           }
         }).addTo(map);
+      }).fail(function() {
+        console.error("Error loading GeoJSON data from: " + url);
       });
     }
 
@@ -70,57 +72,55 @@
       color: "black",
       weight: 2,
       fillOpacity: 0
-    }, ["Community_"], "https://upload.wikimedia.org/wikipedia/commons/9/97/Salfit_6-2018.jpg");
+    }, "https://upload.wikimedia.org/wikipedia/commons/9/97/Salfit_6-2018.jpg");
 
     // إضافة حدود قرية اسكاكا مع صورة مخصصة
     addGeoJsonData("IskA.json", {
       color: "red",
       weight: 2,
       fillOpacity: 0
-    }, ["Community_"], "https://palqura.com/images/village/Iskaka-48619.jpg");
+    }, "https://palqura.com/images/village/Iskaka-48619.jpg");
 
     // إضافة حدود قرية فرخة مع صورة مخصصة
     addGeoJsonData("kiS.json", {
       color: "brown",
       weight: 2,
       fillOpacity: 0
-    }, ["Community_"], "https://palqura.com/images/village/photo_2024-01-15_07-49-41.jpg");
+    }, "https://palqura.com/images/village/photo_2024-01-15_07-49-41.jpg");
 
-    // إضافة طبقة خطوط التوصيلات المنزلية
+    // إضافة طبقة خطوط التوصيلات المنزلية (بدون صورة)
     addGeoJsonData("HouseConnection.json", {
       color: "blue",
       weight: 2,
       dashArray: "5, 5"
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    });
 
-    // إضافة طبقة خطوط المياه 1
+    // إضافة طبقة خطوط المياه 1 (بدون صورة)
     addGeoJsonData("DistributionPipe1.json", {
       color: "red",
       weight: 1,
       dashArray: "5, 5"
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    });
 
-    // إضافة طبقة خطوط المياه 2
+    // إضافة طبقة خطوط المياه 2 (بدون صورة)
     addGeoJsonData("DistributionPipe2.json", {
       color: "yellow",
       weight: 1,
       dashArray: "5, 5"
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    });
 
-    // إضافة طبقة خطوط المياه 6
+    // إضافة طبقة خطوط المياه 6 (بدون صورة)
     addGeoJsonData("DistributionPipe2.json", {
       color: "black",
       weight: 2,
       dashArray: "5, 5"
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    });
 
-    
-    // إضافة طبقة خطوط المياه 
+    // إضافة طبقة خطوط المياه (بدون صورة)
     addGeoJsonData("DistributionPipe3.json", {
       color: "green",
       weight: 3
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
-
+    });
   </script>
 </body>
 </html>
