@@ -42,7 +42,7 @@
       maxZoom: 20
     }).addTo(map);
 
-    // دالة لإضافة بيانات GeoJSON إلى الخريطة مع نافذة منبثقة تحتوي على صورة
+    // دالة لإضافة بيانات GeoJSON إلى الخريطة مع صورة مخصصة لكل منطقة
     function addGeoJsonData(url, styleOptions, imageUrl) {
       $.getJSON(url, function (data) {
         L.geoJson(data, {
@@ -51,7 +51,7 @@
             if (feature.properties && feature.properties.Community_) {
               let popupContent = `
                 <b>Location:</b> ${feature.properties.Community_} <br>
-                <img src="${imageUrl}" alt="Location Image" width="200" style="border-radius: 10px;">
+                <img src="${imageUrl}" alt="${feature.properties.Community_}" width="200" style="border-radius: 10px;">
               `;
               layer.bindPopup(popupContent);
             }
@@ -60,26 +60,26 @@
       });
     }
 
-    // إضافة حدود مدينة سلفيت مع صورة
+    // إضافة حدود مدينة سلفيت مع صورة مخصصة
     addGeoJsonData("SlF.json", {
       color: "black",
       weight: 2,
       fillOpacity: 0
     }, "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Salfit_Palestine.jpg/250px-Salfit_Palestine.jpg");
 
-    // إضافة حدود قرية اسكاكا بدون صورة
+    // إضافة حدود قرية اسكاكا مع صورة مخصصة
     addGeoJsonData("IskA.json", {
       color: "red",
       weight: 2,
       fillOpacity: 0
-    }, "");
+    }, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Iskaka_Palestine.jpg/250px-Iskaka_Palestine.jpg");
 
-    // إضافة حدود قرية فرخة بدون صورة
+    // إضافة حدود قرية فرخة مع صورة مخصصة
     addGeoJsonData("kiS.json", {
       color: "brown",
       weight: 2,
       fillOpacity: 0
-    }, "");
+    }, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Farkha_Palestine.jpg/250px-Farkha_Palestine.jpg");
 
   </script>
 </body>
