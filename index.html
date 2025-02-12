@@ -42,7 +42,23 @@
       maxZoom: 20
     }).addTo(map);
 
-    // دالة لإضافة بيانات GeoJSON إلى الخريطة مع نمط مخصص
+    // إضافة حدود مدينة سلفيت مع نافذة منبثقة تعرض اسمها عند النقر عليها
+    $.getJSON("SlF.json", function (data) {
+      L.geoJson(data, {
+        style: {
+          color: "black", // اللون الأسود للحدود
+          weight: 2, // سماكة الخط
+          fillOpacity: 0 // بدون تعبئة
+        },
+        onEachFeature: function (feature, layer) {
+          if (feature.properties && feature.properties.Community_) {
+            layer.bindPopup("Location: " + feature.properties.Community_);
+          }
+        }
+      }).addTo(map);
+    });
+
+    // دالة لإضافة بيانات GeoJSON إلى الخريطة مع نمط مخصص (للقرى الأخرى)
     function addGeoJsonData(url, styleOptions) {
       $.getJSON(url, function (data) {
         L.geoJson(data, {
@@ -50,13 +66,6 @@
         }).addTo(map);
       });
     }
-
-    // إضافة حدود مدينة سلفيت
-    addGeoJsonData("SlF.json", {
-      color: "black", // اللون الأسود للحدود
-      weight: 2, // سماكة الخط
-      fillOpacity: 0 // بدون تعبئة
-    });
 
     // إضافة حدود قرية اسكاكا
     addGeoJsonData("IskA.json", {
@@ -67,12 +76,11 @@
 
     // إضافة حدود قرية فرخة
     addGeoJsonData("kiS.json", {
-      color: "brown", // اللون الأزرق للحدود
+      color: "brown", // اللون البني للحدود
       weight: 2, // سماكة الخط
       fillOpacity: 0 // بدون تعبئة
     });
 
   </script>
 </body>
-
 </html>
