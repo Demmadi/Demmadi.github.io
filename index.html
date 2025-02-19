@@ -26,24 +26,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   <script>
-    
     const mapOptions = {
       center: [32.082203, 35.182099],  
       zoom: 14,  
       zoomSnap: 0.5    
     };
 
-    
     const map = L.map("map", mapOptions);
 
-    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 20
     }).addTo(map);
 
-   
-    function addGeoJsonData(url, styleOptions, popupFields, isPointLayer = false) {
+    function addGeoJsonData(url, styleOptions, popupFields, isPointLayer = false, imageUrl = null) {
       $.getJSON(url, function (data) {
         L.geoJson(data, {
           pointToLayer: function (feature, latlng) {
@@ -57,7 +53,7 @@
                 fillOpacity: 0.8
               });
             } else {
-              return L.geoJson().geometryToLayer(feature);
+              return L.polyline(feature.geometry.coordinates.map(coord => [coord[1], coord[0]]), styleOptions);
             }
           },
           style: !isPointLayer ? styleOptions : null,
@@ -68,6 +64,11 @@
                 popupContent += `<b>${field}:</b> ${feature.properties[field]}<br>`;
               }
             });
+
+            if (imageUrl) {
+              popupContent += `<br><img src="${imageUrl}" alt="Image" width="200" style="border-radius: 10px;">`;
+            }
+
             layer.bindPopup(popupContent);
           }
         }).addTo(map);
@@ -80,45 +81,45 @@
       color: "black",
       weight: 2,
       fillOpacity: 0
-    }, ["Community_"], false);
+    }, ["Community_"], false, "https://upload.wikimedia.org/wikipedia/commons/9/97/Salfit_6-2018.jpg");
 
     addGeoJsonData("IskA.json", {
       color: "red",
       weight: 2,
       fillOpacity: 0
-    }, ["Community_"], false);
+    }, ["Community_"], false, "https://palqura.com/images/village/Iskaka-48619.jpg");
 
     addGeoJsonData("kiS.json", {
       color: "brown",
       weight: 2,
       fillOpacity: 0
-    }, ["Community_"], false);
+    }, ["Community_"], false, "https://palqura.com/images/village/photo_2024-01-15_07-49-41.jpg");
 
     addGeoJsonData("HouseConnection.json", {
       color: "Navy",
       weight: 2,
       dashArray: "5, 5"
-    }, ["NetworkType", "Material", "Diameter", "layout year"], false);
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
     addGeoJsonData("DistributionPipe1.json", {
       color: "red",
       weight: 1,
-    }, ["NetworkType", "Material", "Diameter", "layout year"], false);
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
     addGeoJsonData("DistributionPipe2.json", {
       color: "blue",
       weight: 2,
-    }, ["NetworkType", "Material", "Diameter", "layout year"], false);
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
     addGeoJsonData("DistributionPipe6.json", {
       color: "black",
       weight: 2,
-    }, ["NetworkType", "Material", "Diameter", "layout year"], false);
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
     addGeoJsonData("DistributionPipe3.json", {
       color: "green",
       weight: 3
-    }, ["NetworkType", "Material", "Diameter", "layout year"], false);
+    }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
     // إضافة طبقة العدادات MeterS.json مع الأيقونة الدائرية الزرقاء الصغيرة
     addGeoJsonData("MeterS.json", {}, ["Name", "Service_Nu", "connection", "location"], true);
