@@ -26,97 +26,102 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   <script>
-    // إعدادات الخريطة
+    
     const mapOptions = {
-      center: [32.082203, 35.182099], // مركز الخريطة (إحداثيات سلفيت)
-      zoom: 14, // مستوى التكبير
-      zoomSnap: 0.5 // التحكم في حساسية التكبير
+      center: [32.082203, 35.182099],  
+      zoom: 14,  
+      zoomSnap: 0.5    
     };
 
-    // إنشاء الخريطة
+    
     const map = L.map("map", mapOptions);
 
-    // إضافة طبقة أساسية (OpenStreetMap)
+    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 20
     }).addTo(map);
 
-    // دالة لإضافة بيانات GeoJSON مع صورة أو معلومات
-    function addGeoJsonData(url, styleOptions, popupFields, imageUrl = null) {
+   
+    function addGeoJsonData(url, styleOptions, popupFields, isPointLayer = false) {
       $.getJSON(url, function (data) {
         L.geoJson(data, {
-          style: styleOptions,
+          pointToLayer: function (feature, latlng) {
+            if (isPointLayer) {
+              return L.circleMarker(latlng, {
+                radius: 4,  // حجم النقطة الصغيرة
+                fillColor: "blue",
+                color: "blue",
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+              });
+            } else {
+              return L.geoJson().geometryToLayer(feature);
+            }
+          },
+          style: !isPointLayer ? styleOptions : null,
           onEachFeature: function (feature, layer) {
-            let popupContent = ""; // تم إزالة Location
-
+            let popupContent = ""; 
             popupFields.forEach(field => {
               if (feature.properties[field]) {
                 popupContent += `<b>${field}:</b> ${feature.properties[field]}<br>`;
               }
             });
-
-            if (imageUrl) {
-              popupContent += `<img src="${imageUrl}" alt="Image" width="200" style="border-radius: 10px;">`;
-            }
-
             layer.bindPopup(popupContent);
           }
         }).addTo(map);
       });
     }
 
-    // إضافة حدود مدينة سلفيت مع صورة مخصصة
+    // إضافة الطبقات المختلفة
+
     addGeoJsonData("SlF.json", {
       color: "black",
       weight: 2,
       fillOpacity: 0
-    }, ["Community_"], "https://upload.wikimedia.org/wikipedia/commons/9/97/Salfit_6-2018.jpg");
+    }, ["Community_"], false);
 
-    // إضافة حدود قرية اسكاكا مع صورة مخصصة
     addGeoJsonData("IskA.json", {
       color: "red",
       weight: 2,
       fillOpacity: 0
-    }, ["Community_"], "https://palqura.com/images/village/Iskaka-48619.jpg");
+    }, ["Community_"], false);
 
-    // إضافة حدود قرية فرخة مع صورة مخصصة
     addGeoJsonData("kiS.json", {
       color: "brown",
       weight: 2,
       fillOpacity: 0
-    }, ["Community_"], "https://palqura.com/images/village/photo_2024-01-15_07-49-41.jpg");
+    }, ["Community_"], false);
 
-    // إضافة طبقة خطوط التوصيلات المنزلية
     addGeoJsonData("HouseConnection.json", {
       color: "Navy",
       weight: 2,
       dashArray: "5, 5"
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    }, ["NetworkType", "Material", "Diameter", "layout year"], false);
 
-    // إضافة طبقة خطوط المياه 1
     addGeoJsonData("DistributionPipe1.json", {
       color: "red",
       weight: 1,
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    }, ["NetworkType", "Material", "Diameter", "layout year"], false);
 
-    // إضافة طبقة خطوط المياه 2
     addGeoJsonData("DistributionPipe2.json", {
       color: "blue",
       weight: 2,
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    }, ["NetworkType", "Material", "Diameter", "layout year"], false);
 
-    // إضافة طبقة خطوط المياه 6
     addGeoJsonData("DistributionPipe6.json", {
       color: "black",
       weight: 2,
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    }, ["NetworkType", "Material", "Diameter", "layout year"], false);
 
-    // إضافة طبقة خطوط المياه 
     addGeoJsonData("DistributionPipe3.json", {
       color: "green",
       weight: 3
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    }, ["NetworkType", "Material", "Diameter", "layout year"], false);
+
+    // إضافة طبقة العدادات MeterS.json مع الأيقونة الدائرية الزرقاء الصغيرة
+    addGeoJsonData("MeterS.json", {}, ["Name", "Service_Nu", "connection", "location"], true);
 
   </script>
 </body>
