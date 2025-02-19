@@ -4,13 +4,14 @@
   <meta charset="utf-8" />
   <title>Salfit Water Network</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
   <style>
     body {
       margin: 0;
       height: 100%;
       width: 100%;
     }
-
     #map {
       position: absolute;
       width: 100%;
@@ -24,6 +25,7 @@
 
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 
   <script>
     const mapOptions = {
@@ -39,26 +41,30 @@
       maxZoom: 20
     }).addTo(map);
 
+    const markers = L.markerClusterGroup();
+
     function addGeoJsonData(url, styleOptions, popupFields, isPointLayer = false, imageUrl = null) {
       $.getJSON(url, function (data) {
-        L.geoJson(data, {
+        const layer = L.geoJson(data, {
           pointToLayer: function (feature, latlng) {
-            if (isPointLayer) {
-              return L.circleMarker(latlng, {
-                radius: 4,  // حجم النقطة الصغيرة
+            if (isPointLayer && feature.geometry.type === "Point") {
+              let offset = (Math.random() - 0.5) * 0.0001; // إزاحة صغيرة عشوائية
+              let newLatLng = [latlng.lat + offset, latlng.lng + offset];
+
+              return L.circleMarker(newLatLng, {
+                radius: 6,  
                 fillColor: "blue",
                 color: "blue",
                 weight: 1,
                 opacity: 1,
-                fillOpacity: 0.8
+                fillOpacity: 0.9
               });
-            } else {
-              return L.polyline(feature.geometry.coordinates.map(coord => [coord[1], coord[0]]), styleOptions);
             }
+            return L.geoJson().geometryToLayer(feature);
           },
           style: !isPointLayer ? styleOptions : null,
           onEachFeature: function (feature, layer) {
-            let popupContent = ""; 
+            let popupContent = "";
             popupFields.forEach(field => {
               if (feature.properties[field]) {
                 popupContent += `<b>${field}:</b> ${feature.properties[field]}<br>`;
@@ -71,58 +77,45 @@
 
             layer.bindPopup(popupContent);
           }
-        }).addTo(map);
+        });
+
+        if (isPointLayer) {
+          markers.addLayer(layer);
+        } else {
+          layer.addTo(map);
+        }
+      }).fail(function() {
+        console.error("❌ فشل تحميل ملف " + url);
       });
     }
 
     // إضافة الطبقات المختلفة
+    addGeoJsonData("SlF.json", { color: "black", weight: 2, fillOpacity: 0 }, ["Community_"], false, "https://upload.wikimedia.org/wikipedia/commons/9/97/Salfit_6-2018.jpg");
+    addGeoJsonData("IskA.json", { color: "red", weight: 2, fillOpacity: 0 }, ["Community_"], false, "https://palqura.com/images/village/Iskaka-48619.jpg");
+    addGeoJsonData("kiS.json", { color: "brown", weight: 2, fillOpacity: 0 }, ["Community_"], false, "https://palqura.com/images/village/photo_2024-01-15_07-49-41.jpg");
+    addGeoJsonData("HouseConnection.json", { color: "Navy", weight: 2, dashArray: "5, 5" }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    addGeoJsonData("DistributionPipe1.json", { color: "red", weight: 1 }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    addGeoJsonData("DistributionPipe2.json", { color: "blue", weight: 2 }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    addGeoJsonData("DistributionPipe6.json", { color: "black", weight: 2 }, ["NetworkType", "Material", "Diameter", "layout year"]);
+    addGeoJsonData("DistributionPipe3.json", { color: "green", weight: 3 }, ["NetworkType", "Material", "Diameter", "layout year"]);
 
-    addGeoJsonData("SlF.json", {
-      color: "black",
-      weight: 2,
-      fillOpacity: 0
-    }, ["Community_"], false, "https://upload.wikimedia.org/wikipedia/commons/9/97/Salfit_6-2018.jpg");
-
-    addGeoJsonData("IskA.json", {
-      color: "red",
-      weight: 2,
-      fillOpacity: 0
-    }, ["Community_"], false, "https://palqura.com/images/village/Iskaka-48619.jpg");
-
-    addGeoJsonData("kiS.json", {
-      color: "brown",
-      weight: 2,
-      fillOpacity: 0
-    }, ["Community_"], false, "https://palqura.com/images/village/photo_2024-01-15_07-49-41.jpg");
-
-    addGeoJsonData("HouseConnection.json", {
-      color: "Navy",
-      weight: 2,
-      dashArray: "5, 5"
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
-
-    addGeoJsonData("DistributionPipe1.json", {
-      color: "red",
-      weight: 1,
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
-
-    addGeoJsonData("DistributionPipe2.json", {
-      color: "blue",
-      weight: 2,
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
-
-    addGeoJsonData("DistributionPipe6.json", {
-      color: "black",
-      weight: 2,
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
-
-    addGeoJsonData("DistributionPipe3.json", {
-      color: "green",
-      weight: 3
-    }, ["NetworkType", "Material", "Diameter", "layout year"]);
-
-    // إضافة طبقة العدادات MeterS.json مع الأيقونة الدائرية الزرقاء الصغيرة
+    // إضافة طبقة العدادات MeterS.json باستخدام markerCluster
     addGeoJsonData("MeterS.json", {}, ["Name", "Service_Nu", "connection", "location"], true);
+
+    // إضافة مجموعة التجميع إلى الخريطة
+    map.addLayer(markers);
+
+    // تغيير حجم النقطة حسب مستوى التكبير
+    map.on("zoomend", function() {
+      let zoomLevel = map.getZoom();
+      let newRadius = zoomLevel < 14 ? 2 : zoomLevel < 16 ? 4 : 6;
+
+      markers.eachLayer(function(layer) {
+        if (layer instanceof L.CircleMarker) {
+          layer.setRadius(newRadius);
+        }
+      });
+    });
 
   </script>
 </body>
